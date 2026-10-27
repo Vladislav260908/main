@@ -1,0 +1,75 @@
+from math import *
+''' 1,0
+    3,4
+    9,2
+    7,-2
+    3,2
+'''
+kol_vo_vershin = int(input('Введите кол-во вершин многоугольника '))
+fig = []  # по часовой
+for i in range(kol_vo_vershin):
+    x,y = input().split(',')  # по часовой
+    x,y = float(x), float(y)
+    fig.append([x,y])
+#prov = int(input('Сколько проверок ')) #кол-во проверок точек
+for _ in range(int(input('Сколько проверок '))): #кол-во проверок точек )
+    pointX, pointY = map(float, input('Введите координаты точки  \n').split(','))
+    #print(pointX, pointY)
+    # if (pointX == 1 and pointY== 0) or (pointX == 3 and pointY == 4) or (pointX == 9 and pointY == 2) or (pointX == 7 and pointY == 2) or (pointX == 3 and pointY == 2):
+    #      print('Точка попала в вершину')
+    # if (pointX and pointY) in fig:
+    #     print('Точка попала в вершину')
+    #for i in range(kol_vo_vershin):
+    Ax, Ay = fig[0][0] - pointX, fig[0][1] - pointY
+    Bx, By = fig[1][0] - pointX, fig[1][1] - pointY
+    Cx, Cy = fig[2][0] - pointX, fig[2][1] - pointY
+    Dx, Dy = fig[3][0] - pointX, fig[3][1] - pointY
+    Ex, Ey = fig[4][0] - pointX, fig[4][1] - pointY
+    try:#поиск углов для кадого их рёбер между векторами
+        TetaAB = acos((Ax * Bx + Ay * By) / ((Ax ** 2 + Ay ** 2) ** 0.5 * (Bx ** 2 + By ** 2) ** 0.5))
+        TetaBC = acos((Bx * Cx + By * Cy) / ((Bx ** 2 + By ** 2) ** 0.5 * (Cx ** 2 + Cy ** 2) ** 0.5))
+        TetaCD = acos((Cx * Dx + Cy * Dy) / ((Cx ** 2 + Cy ** 2) ** 0.5 * (Dx ** 2 + Dy ** 2) ** 0.5))
+        TetaDE = acos((Dx * Ex + Dy * Ey) / ((Dx ** 2 + Dy ** 2) ** 0.5 * (Ex ** 2 + Ey ** 2) ** 0.5))
+        TetaEA = acos((Ex * Ax + Ey * Ay) / ((Ex ** 2 + Ey ** 2) ** 0.5 * (Ax ** 2 + Ay ** 2) ** 0.5))
+        #перевод в градусы
+        def grad(x):
+            return degrees(x)
+        #перевод в градусы
+        TetaAB = grad(TetaAB)
+        TetaBC = grad(TetaBC)
+        TetaCD = grad(TetaCD)
+        TetaDE = grad(TetaDE)
+        TetaEA = grad(TetaEA)
+        #ВЕКТОРНОЕ ПРОИЗВЕДЕНИЕ
+        AB = (Ax * By - Ay * Bx)
+        BC = (Bx * Cy - By * Cx)
+        CD = (Cx * Dy - Cy * Dx)
+        DE = (Dx * Ey - Dy * Ex)
+        EA = (Ex * Ay - Ey * Ax)
+        if AB >= 0:
+            TetaAB = TetaAB
+        else:
+            TetaAB *= -1
+        if BC > 0:
+            TetaBC = TetaBC
+        else:
+            TetaBC *= -1
+        if CD >= 0:
+            TetaCD = TetaCD
+        else:
+            TetaCD *= -1
+        if DE >= 0:
+            TetaDE = TetaDE
+        else:
+            TetaDE *= -1
+        if EA >= 0:
+            TetaEA = TetaEA
+        else:
+            TetaEA *= -1
+        summatet = abs(int((TetaAB+TetaBC+TetaCD+TetaDE+TetaEA)))
+        if summatet ==0:
+            print('точка не попала в фигуру ')
+        elif summatet == 360:
+            print('Точка попала в фигуру ')
+    except ZeroDivisionError:
+        print('Точка попала в вершину')
